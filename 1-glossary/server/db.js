@@ -5,11 +5,12 @@ mongoose.connect('mongodb://localhost/glossary', {useNewUrlParser: true, useUnif
 // 2. Set up any schema and models needed by the app
 // 3. Export the models
 // 4. Import the models into any modules that need them
-const friendSchema = new mongoose.Schema({
+const friendSchema = mongoose.Schema({
   name: {type: String, unique: true},
   phrase: String
 })
 
+//make model and add blueprint
 const Friend = mongoose.model('Friend', friendSchema);
 
 // let friends = [
@@ -32,13 +33,34 @@ const Friend = mongoose.model('Friend', friendSchema);
 // ]
 
 let create = (newObj) => {
-  let name = newObj.name;
-  let phrase = newObj.phrase;
-
-  let newFriend = new Friend( {name, phrase} );
-  newFriend.save();
+  let newFriend = new Friend(newObj);
+  newFriend.save()
 
 }
 
+let retrieve = (query = '', callback) => {
+  if (query !== '') {
+    Friend.find({name: query}, (err, data) => {
+      if (err) {
+        callback(err);
+      } else if (data.length === 0) {
+        err = new Error('error');
+        callback(err);
+      } else {
+        callback(null, data);
+      }
+    });
+  } else {
+    Friend.find({}, (err, data) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, data);
+      }
+    });
+  }
+}
+
 module.exports.create = create;
+module.exports.retrieve = retrieve;
 module.exports.Friend = Friend;
