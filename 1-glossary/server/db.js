@@ -60,6 +60,27 @@ let retrieve = (query = '', callback) => {
   }
 }
 
+let replace = (query, change, callback) => {
+  //find object that match name property
+  //replace it with change
+  //grab the whole thing and send back
+  Friend
+    .findOneAndUpdate({name: query}, {phrase: change}, (err, data) => {
+      if (err) {
+        callback(err);
+      } else {
+        Friend.find({}, (err, data) => {
+          if (err) {
+            callback(err);
+          } else {
+            callback(null, data);
+          }
+        })
+      }
+    })
+}
+
 module.exports.create = create;
 module.exports.retrieve = retrieve;
+module.exports.replace = replace;
 module.exports.Friend = Friend;

@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from "react-dom";
 // import ReactDOM from "react-dom";
 import axios from 'axios';
+import EntryList from './components/EntryList.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class App extends React.Component {
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.editPhrase = this.editPhrase.bind(this);
   }
 
   componentDidMount() {
@@ -24,9 +26,15 @@ class App extends React.Component {
     })
   }
 
-  // handleChange(e) {
-  //   this.setState({friends: })
-  // }
+  editPhrase(e) {
+    e.preventDefault();
+    console.log(e.target.value);
+    console.log(e.target.name)
+    console.log(this.props.friend)
+
+    axios.put({})
+
+  }
 
   handleSubmit(e) {
     // console.log("event phrase", e.target.phrase.value, "event name", e.target.firstName.value)
@@ -46,7 +54,7 @@ class App extends React.Component {
         console.log('oh no')
       })
     })
-    
+
     .catch((err) => {
       console.log(err)
     })
@@ -55,10 +63,10 @@ class App extends React.Component {
   render() {
     const friends = this.state.friends;
     const list = friends.map((friend) => {
-      console.log(friend.name, friend.phrase)
       return (
         <li>
           {friend.name} : {friend.phrase}
+          <button>Edit</button>
         </li>
       )
     })
@@ -73,10 +81,12 @@ class App extends React.Component {
           Phrase:
           <input name="phrase" type="text" placeholder="add catch phrase"  />
           </label>
-          <input type="submit" value="Submit"/>
+          <input type="submit" value="Add"/>
           </form>
         </div>
-        <div>{list}</div>
+        <div>
+          <EntryList friends={this.state.friends} edit={this.editPhrase}/>
+        </div>
       </div>
     )
   };
