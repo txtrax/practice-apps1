@@ -32,10 +32,9 @@ const Friend = mongoose.model('Friend', friendSchema);
 //   },
 // ]
 
-let create = (newObj) => {
+let create = (newObj, callback) => {
   let newFriend = new Friend(newObj);
-  newFriend.save()
-
+  newFriend.save(callback);
 }
 
 let retrieve = (query = '', callback) => {

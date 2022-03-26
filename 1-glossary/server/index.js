@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const db = require('./db.js');
-console.log()
 
 const app = express();
 
@@ -24,8 +23,14 @@ app.get('/friends', ((req, res) => {
 }))
 
 app.post('/friends', ((req, res) => {
-  db.create(req.query)
-  res.status(201).end();
+  // console.log('inside server post request');
+  db.create(req.body, (err, data) => {
+    if (err) {
+      res.status(404).send()
+    } else {
+      res.status(201).send();
+    }
+  })
 }))
 
 app.listen(process.env.PORT);
